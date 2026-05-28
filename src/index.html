@@ -1,0 +1,1061 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" style="--word-size: 32px; --number-size: 26px;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>英语单词乱序排列工具 | 伍泽华老师定制（全词库版·选必一）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f6f9fc;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            color: #1e293b; line-height: 1.4; position: relative;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='200'%3E%3Ctext x='-10' y='80' font-size='22' fill='%23000000' transform='rotate(-30)' opacity='0.8'%3E伍泽华%3C/text%3E%3Ctext x='120' y='160' font-size='18' fill='%23000000' transform='rotate(-30)' opacity='0.8'%3Ewuzehua%3C/text%3E%3C/svg%3E");
+            background-repeat: repeat;
+            opacity: 0.04; z-index: 9999; pointer-events: none;
+        }
+        @media print { body::before { opacity: 0.06; } }
+        .app { max-width: 1400px; margin: 0 auto; padding: 2rem 1.8rem 3rem; position: relative; z-index: 1; }
+        .hero {
+            margin-bottom: 2rem; border-bottom: 2px solid #eef2f6; padding-bottom: 1.2rem;
+            display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        }
+        .title-section { flex: 1; }
+        .title-section h1 {
+            font-size: 2.2rem; font-weight: 700; letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #1e2b3c, #2c4a6e);
+            background-clip: text; -webkit-background-clip: text; color: transparent; margin-bottom: 0.4rem;
+        }
+        .custom-sign {
+            font-size: 1.25rem; font-weight: 700;
+            font-family: '楷体', KaiTi, STKaiti, '华文楷体', 'Microsoft YaHei', serif;
+            background: linear-gradient(135deg, #d4a017, #b8860b);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            display: inline-block; padding: 0.2rem 0.8rem; border-radius: 30px;
+            letter-spacing: 0.5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            border: 1px solid rgba(212, 160, 23, 0.3); background-color: #fff9e6;
+        }
+        .hero-badge {
+            background: #ffffffcc; backdrop-filter: blur(4px); padding: 0.4rem 1rem; border-radius: 40px;
+            font-size: 0.75rem; font-weight: 600; color: #2c5a7a; border: 1px solid #dce5ef;
+            white-space: nowrap; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .hero-badge select {
+            border: 1px solid #dce5ef; border-radius: 20px; padding: 0.2rem 0.8rem;
+            font-size: 0.8rem; background: white; color: #1f3b4c; outline: none; cursor: pointer; font-weight: 600;
+        }
+        .workspace { display: grid; grid-template-columns: 380px 1fr; gap: 1.8rem; align-items: start; }
+        .input-card {
+            background: #ffffff; border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.02), 0 0 0 1px #eef2f8; overflow: hidden;
+        }
+        .card-header { padding: 1.2rem 1.5rem 0.6rem; border-bottom: 1px solid #edf2f7; }
+        .card-header h2 { font-size: 1.25rem; font-weight: 600; color: #0f2b3d; }
+        .card-body { padding: 1.3rem 1.5rem 1.8rem; }
+        .file-area { margin-bottom: 1.4rem; }
+        label { display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; color: #54708f; margin-bottom: 0.5rem; }
+        input[type="file"] {
+            width: 100%; padding: 0.7rem 0.8rem; border: 1px solid #dce5ef; border-radius: 18px;
+            background: #fefefe; font-size: 0.85rem; color: #1e2f3f; cursor: pointer;
+        }
+        textarea {
+            width: 100%; min-height: 260px; border: 1px solid #e2eaf1; border-radius: 20px;
+            padding: 0.9rem 1rem; font-size: 0.9rem; line-height: 1.5; font-family: monospace;
+            background: #ffffff; resize: vertical; outline: none;
+        }
+        textarea:focus { border-color: #86a9cf; box-shadow: 0 0 0 3px rgba(100,140,180,0.15); }
+        .button-group { display: flex; gap: 0.7rem; margin: 1.2rem 0 1rem; flex-wrap: wrap; }
+        button {
+            border: none; background: #f0f4f9; padding: 0.6rem 1.2rem; border-radius: 40px;
+            font-weight: 600; font-size: 0.85rem; cursor: pointer; color: #1f3b4c;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn-primary { background: #1f3b4c; color: white; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        .btn-primary:hover { background: #0f2b3a; }
+        .btn-secondary { background: #eef3fa; border: 1px solid #dce5ef; }
+        .btn-secondary:hover { background: #e2eaf3; }
+        .btn-danger { background: #fff3f0; color: #b13e3e; border: 1px solid #ffe0db; }
+        .btn-danger:hover { background: #ffe4df; }
+        .btn-accent { background: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; }
+        .btn-accent:hover { background: #c8e6c9; border-color: #a5d6a7; }
+        .settings-row {
+            display: flex; gap: 1rem; margin-top: 1.4rem; padding-top: 1.2rem;
+            border-top: 1px solid #eef2f8; flex-wrap: wrap;
+        }
+        .setting-item { flex: 1; min-width: 100px; }
+        .setting-item label { font-size: 0.7rem; margin-bottom: 0.3rem; }
+        select, .setting-item input {
+            width: 100%; padding: 0.5rem 0.6rem; border-radius: 16px;
+            border: 1px solid #d4e0ea; background: white; font-size: 0.85rem; outline: none;
+        }
+        .display-card {
+            background: #ffffff; border-radius: 28px;
+            box-shadow: 0 8px 26px rgba(0,0,0,0.03), 0 0 0 1px #eef2f8;
+            display: flex; flex-direction: column; overflow: hidden; min-height: 70vh;
+        }
+        .display-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 1.5rem; border-bottom: 1px solid #ecf3f9; flex-wrap: wrap; gap: 12px; background: #fefefe;
+        }
+        .stats { font-size: 0.8rem; font-weight: 600; background: #f0f6fe; padding: 0.3rem 0.9rem; border-radius: 30px; color: #2c6280; }
+        .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+        .word-board { flex: 1; padding: 1.8rem; background: #fdfdfd; }
+        .word-grid { display: grid; gap: 1rem; align-content: start; }
+        .word-grid.auto { grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
+        .word-grid.one { grid-template-columns: 1fr; }
+        .word-grid.two { grid-template-columns: repeat(2, 1fr); }
+        .word-grid.three { grid-template-columns: repeat(3, 1fr); }
+        .word-grid.four { grid-template-columns: repeat(4, 1fr); }
+        .word-card {
+            display: flex; align-items: baseline; gap: 0.7rem; background: #ffffff;
+            border: 1px solid #e9f0f5; border-radius: 20px; padding: 0.9rem 1.2rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .word-card:hover { border-color: #cbdde9; }
+        .number { font-size: var(--number-size, 26px); font-weight: 700; color: #7f9bbb; min-width: 3.2rem; }
+        .word { font-size: var(--word-size, 32px); font-weight: 700; line-height: 1.2; color: #1f2f3e; word-break: break-word; }
+        .empty {
+            text-align: center; padding: 3rem 2rem; color: #9bb1c2; font-weight: 500;
+            background: #fafdff; border-radius: 24px; border: 1px dashed #dce7f0;
+        }
+        .status-message, .error-message { font-size: 0.75rem; margin-top: 0.8rem; font-weight: 500; }
+        .status-message { color: #2c7a4d; }
+        .error-message { color: #c2412c; }
+
+        /* ================= 全屏投屏版 ================= */
+        body.fullscreen-mode {
+            background: #ffffff; overflow: hidden;
+        }
+        body.fullscreen-mode::before { opacity: 0.04; }
+        body.fullscreen-mode .app { max-width: none; padding: 0; }
+        body.fullscreen-mode .hero,
+        body.fullscreen-mode .input-card { display: none; }
+        body.fullscreen-mode .workspace { display: block; }
+        body.fullscreen-mode .display-card { min-height: 100vh; border-radius: 0; box-shadow: none; background: #ffffff; }
+        body.fullscreen-mode .display-bar {
+            position: fixed; right: 10px; top: 8px; z-index: 50; padding: 4px 8px;
+            border: 1px solid rgba(0,0,0,0.08); border-radius: 999px;
+            background: rgba(255,255,255,0.76); backdrop-filter: blur(4px); opacity: 0.14; transition: opacity 0.2s ease;
+        }
+        body.fullscreen-mode .display-bar:hover { opacity: 1; }
+        body.fullscreen-mode .display-bar .stats { display: none; }
+        body.fullscreen-mode .display-bar button { padding: 4px 8px; font-size: 12px; border-radius: 999px; background: rgba(240,240,240,0.9); color: #111; }
+        body.fullscreen-mode .word-board { width: 100vw; height: 100vh; min-height: 100vh; overflow-y: auto; padding: 8px 2px 14px; background: #ffffff; }
+        body.fullscreen-mode .word-grid.fullscreen-grid { width: 100%; display: grid; grid-auto-flow: row; column-gap: 0; row-gap: 0; align-content: start; }
+        body.fullscreen-mode .word-grid.fullscreen-unit { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: calc((100vh - 22px) / 16); }
+        body.fullscreen-mode .word-grid.fullscreen-column { grid-template-columns: repeat(5, minmax(0, 1fr)); grid-auto-rows: calc((100vh - 22px) / 6); }
+        body.fullscreen-mode .word-card {
+            grid-column: span var(--span, 1); min-width: 0; height: 100%;
+            display: flex; align-items: flex-end; justify-content: flex-start; gap: 0;
+            padding: 0 2px 3px; border: none; border-bottom: 1.2px dotted #111;
+            border-radius: 0; background: transparent; box-shadow: none; overflow: hidden;
+        }
+        body.fullscreen-mode .number,
+        body.fullscreen-mode .word {
+            font-family: "Times New Roman", Times, "Nimbus Roman No9 L", serif;
+            font-size: var(--word-size); font-weight: 400; line-height: 1; color: #000000;
+            letter-spacing: -0.8px; white-space: nowrap; overflow: visible; text-overflow: clip; word-break: normal;
+        }
+        body.fullscreen-mode .number { min-width: auto; flex: 0 0 auto; color: #000000; margin-right: 0; }
+        body.fullscreen-mode .word { flex: 0 1 auto; }
+        body.fullscreen-mode .empty {
+            height: 100vh; display: flex; align-items: center; justify-content: center;
+            border: none; background: #fff; color: #888; font-size: 30px; font-family: "Times New Roman", Times, serif;
+        }
+
+        @media (max-width: 820px) {
+            .workspace { grid-template-columns: 1fr; }
+            .app { padding: 1.5rem; }
+            .word-grid.two, .word-grid.three, .word-grid.four { grid-template-columns: 1fr; }
+        }
+        @media print {
+            body { background: white; }
+            .hero, .input-card, .display-bar { display: none; }
+            .display-card { box-shadow: none; border: none; }
+            .word-card { border: 1px solid #ccc; }
+        }
+
+        #login-wrapper {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; z-index: 9999;
+        }
+        .login-box {
+            background: #fff; padding: 40px; border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 300px;
+        }
+        .login-box h2 { margin-top: 0; color: #333; font-size: 24px; }
+        .login-box input {
+            width: 100%; padding: 10px; margin: 10px 0;
+            border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px;
+        }
+        .login-box button {
+            width: 100%; padding: 12px; background-color: #0066cc; color: white;
+            border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 15px;
+        }
+        .login-box button:hover { background-color: #0052a3; }
+        #error-msg { color: red; font-size: 14px; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+<div id="login-wrapper">
+  <div class="login-box">
+      <h2>🔒 访问验证</h2>
+      <p style="font-size: 14px; color: #666;">请输入伍老师专属秘钥</p>
+      <input type="text" id="username" placeholder="用户名">
+      <input type="password" id="password" placeholder="密码" onkeydown="if(event.keyCode==13) verifyLogin()">
+      <button onclick="verifyLogin()">登 录</button>
+      <div id="error-msg">用户名或密码错误，请重试！</div>
+  </div>
+</div>
+
+<main class="app" id="main-app" style="display: none;">
+  <div class="hero">
+    <div class="title-section">
+      <h1>📖 英语单词乱序排列工具</h1>
+      <div class="custom-sign">石门六中伍泽华老师定制 · 保留序号 · 课堂投屏/打印 · 选必一全词库（4单元+15分列）</div>
+    </div>
+    <div class="hero-badge">
+      <span>📚 词库：</span>
+      <select id="wordSetSelect">
+        <optgroup label="选必一 单元">
+          <option value="u1">选必一 U1（90词）</option>
+          <option value="u2">选必一 U2（83词）</option>
+          <option value="u3">选必一 U3（74词）</option>
+          <option value="u4">选必一 U4（74词）</option>
+        </optgroup>
+        <optgroup label="选必一 分列">
+          <option value="u1_col1">选必一 第一列（16词）</option>
+          <option value="u1_col2">选必一 第二列（21词）</option>
+          <option value="u1_col3">选必一 第三列（30词）</option>
+          <option value="u1_col4">选必一 第四列（23词）</option>
+          <option value="u1_col5">选必一 第五列（21词）</option>
+          <option value="u1_col6">选必一 第六列（25词）</option>
+          <option value="u1_col7">选必一 第七列（19词）</option>
+          <option value="u1_col8">选必一 第八列（21词）</option>
+          <option value="u1_col9">选必一 第九列（24词）</option>
+          <option value="u1_col10">选必一 第十列（23词）</option>
+          <option value="u1_col11">选必一 第十一列（23词）</option>
+          <option value="u1_col12">选必一 第十二列（18词）</option>
+          <option value="u1_col13">选必一 第十三列（22词）</option>
+          <option value="u1_col14">选必一 第十四列（23词）</option>
+          <option value="u1_col15">选必一分列剩下单词（12词）</option>
+        </optgroup>
+      </select>
+    </div>
+  </div>
+
+  <div class="workspace">
+    <aside class="input-card">
+      <div class="card-header"><h2>📂 导入单词库</h2></div>
+      <div class="card-body">
+        <div class="file-area">
+          <label>📎 上传文件 (Word/Excel/TXT/CSV)</label>
+          <input type="file" id="fileInput" accept=".docx,.xlsx,.xls,.txt,.csv,.text">
+        </div>
+        <label>✏️ 编辑或粘贴单词列表</label>
+        <textarea id="wordInput" spellcheck="false" placeholder="1. apple
+2. take off
+3. beautiful
+4. environment"></textarea>
+        <div class="button-group">
+          <button class="btn-primary" id="shuffleBtn">🎲 生成乱序</button>
+          <button class="btn-secondary" id="sampleBtn">📋 示例</button>
+          <button class="btn-danger" id="clearBtn">🗑️ 清空</button>
+        </div>
+        <div class="button-group" style="margin-top: 0.2rem;">
+          <button class="btn-secondary" id="exportJsonBtn" title="导出当前数据为 system_backup.json">📥 导出备份 JSON</button>
+          <button class="btn-secondary" id="importJsonBtn" title="从 JSON 文件恢复数据">📤 导入 JSON 数据</button>
+          <button class="btn-secondary" id="exportHtmlBtn" title="生成嵌入当前数据的独立 HTML 文件">📦 导出嵌入 HTML</button>
+          <button class="btn-accent" id="addWordSetBtn" title="添加JSON词库文件到词库下拉列表">📚 增加词库</button>
+        </div>
+        <div class="settings-row">
+          <div class="setting-item">
+            <label>显示列数</label>
+            <select id="columnSelect">
+              <option value="auto" selected>自动适配</option>
+              <option value="one">1列</option>
+              <option value="two">2列</option>
+              <option value="three">3列</option>
+              <option value="four">4列</option>
+            </select>
+          </div>
+          <div class="setting-item">
+            <label>单词字号</label>
+            <input id="fontSizeInput" type="number" min="24" max="72" value="32" step="2">
+          </div>
+        </div>
+        <div id="statusBox" class="status-message"></div>
+        <div id="errorBox" class="error-message" style="display: none;"></div>
+      </div>
+    </aside>
+
+    <section class="display-card" id="displayPanel">
+      <div class="display-bar">
+        <div class="stats" id="stats">0 个单词</div>
+        <div class="action-buttons">
+          <button class="btn-secondary" id="reshuffleBtn">🔄 再次乱序</button>
+          <button class="btn-secondary" id="copyBtn">📋 复制结果</button>
+          <button class="btn-secondary" id="printBtn">🖨️ 打印</button>
+          <button class="btn-secondary" id="fullscreenBtn">🖥️ 全屏</button>
+        </div>
+      </div>
+      <div class="word-board" id="wordBoard">
+        <div class="empty">✨ 请导入单词或粘贴列表，点击「生成乱序」<br>保留原始序号，单词随机排序</div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<input type="file" id="jsonFileInput" accept=".json" style="display:none">
+<input type="file" id="wordSetFileInput" accept=".json" style="display:none">
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+
+<!-- 主脚本：完整词库与核心逻辑 -->
+<script type="text/plain" id="mainScript">
+(function() {
+  // ========== 全部内置词库（选必一：4个单元 + 15个分列）==========
+  const UNIT_U1 = {"version":1,"items":[{"number":"1.","word":"mood"},{"number":"2.","word":"combination"},{"number":"3.","word":"do the trick"},{"number":"4.","word":"creamy"},{"number":"5.","word":"flavo(u)r"},{"number":"6.","word":"greedily"},{"number":"7.","word":"gently"},{"number":"8.","word":"dessert"},{"number":"9.","word":"association"},{"number":"10.","word":"vary"},{"number":"11.","word":"link"},{"number":"12.","word":"emotion"},{"number":"13.","word":"saucer"},{"number":"14.","word":"vinegar"},{"number":"15.","word":"native"},{"number":"16.","word":"salty"},{"number":"17.","word":"sour"},{"number":"18.","word":"cry out for"},{"number":"19.","word":"relieve"},{"number":"20.","word":"bond"},{"number":"21.","word":"security"},{"number":"22.","word":"generate"},{"number":"23.","word":"calorie"},{"number":"24.","word":"digest"},{"number":"25.","word":"lower"},{"number":"26.","word":"cycle"},{"number":"27.","word":"enhance"},{"number":"28.","word":"throw oneself into"},{"number":"29.","word":"boil"},{"number":"30.","word":"fry"},{"number":"31.","word":"steak"},{"number":"32.","word":"pan"},{"number":"33.","word":"impress"},{"number":"34.","word":"buffet"},{"number":"35.","word":"bay"},{"number":"36.","word":"scenery"},{"number":"37.","word":"bet"},{"number":"38.","word":"atmosphere"},{"number":"39.","word":"out of this world"},{"number":"40.","word":"version"},{"number":"41.","word":"flling"},{"number":"42.","word":"elderly"},{"number":"43.","word":"bake"},{"number":"44.","word":"flour"},{"number":"45.","word":"adorable"},{"number":"46.","word":"mild"},{"number":"47.","word":"tiramisu"},{"number":"48.","word":"bakery"},{"number":"49.","word":"layer"},{"number":"50.","word":"cheese"},{"number":"51.","word":"bitter"},{"number":"52.","word":"cream"},{"number":"53.","word":"ingredient"},{"number":"54.","word":"loose"},{"number":"55.","word":"let sth loose"},{"number":"56.","word":"chilli"},{"number":"57.","word":"pepper"},{"number":"58.","word":"Sichuan pepper"},{"number":"59.","word":"onion"},{"number":"60.","word":"spring onion"},{"number":"61.","word":"damp"},{"number":"62.","word":"foggy"},{"number":"63.","word":"dynasty"},{"number":"64.","word":"expand"},{"number":"65.","word":"multiple"},{"number":"66.","word":"sauce"},{"number":"67.","word":"plain"},{"number":"68.","word":"slice"},{"number":"69.","word":"chef"},{"number":"70.","word":"property"},{"number":"71.","word":"appropriate"},{"number":"72.","word":"estimate"},{"number":"73.","word":"consume"},{"number":"74.","word":"hit the spot"},{"number":"75.","word":"dim sum"},{"number":"76.","word":"essential"},{"number":"77.","word":"innovation"},{"number":"78.","word":"concept"},{"number":"79.","word":"stimulate"},{"number":"80.","word":"appetite"},{"number":"81.","word":"delicate"},{"number":"82.","word":"emphasis"},{"number":"83.","word":"steam"},{"number":"84.","word":"gram"},{"number":"85.","word":"cabbage"},{"number":"86.","word":"wrapper"},{"number":"87.","word":"mixture"},{"number":"88.","word":"edge"},{"number":"89.","word":"apart"},{"number":"90.","word":"fall apart"}],"shuffledWords":["saucer","damp","buffet","edge","stimulate","mood","flavo(u)r","bay","tiramisu","cycle","sour","apart","slice","bond","version","fall apart","onion","cabbage","hit the spot","consume","dessert","association","emphasis","fry","steam","lower","cheese","spring onion","digest","calorie","mixture","essential","estimate","out of this world","emotion","gently","throw oneself into","innovation","sauce","dim sum","boil","native","bakery","steak","Sichuan pepper","chef","foggy","bake","plain","bitter","scenery","security","elderly","vinegar","greedily","atmosphere","layer","creamy","salty","relieve","vary","adorable","generate","link","bet","appropriate","pepper","pan","delicate","let sth loose","mild","dynasty","expand","ingredient","cream","loose","wrapper","do the trick","enhance","flour","flling","concept","impress","cry out for","chilli","appetite","property","combination","multiple","gram"],"column":"auto","fontSize":32};
+  const UNIT_U2 = {"version":1,"items":[{"number":"1.","word":"Austrian"},{"number":"2.","word":"composer"},{"number":"3.","word":"symphony"},{"number":"4.","word":"concerto"},{"number":"5.","word":"Polish"},{"number":"6.","word":"compose"},{"number":"7.","word":"deserve"},{"number":"8.","word":"tear apart"},{"number":"9.","word":"pleasant"},{"number":"10.","word":"whisper"},{"number":"11.","word":"dramatic"},{"number":"12.","word":"weep"},{"number":"13.","word":"overcome"},{"number":"14.","word":"sorrow"},{"number":"15.","word":"grave"},{"number":"16.","word":"transform"},{"number":"17.","word":"forever"},{"number":"18.","word":"combine"},{"number":"19.","word":"rely on"},{"number":"20.","word":"blues"},{"number":"21.","word":"folk"},{"number":"22.","word":"tune"},{"number":"23.","word":"lyric"},{"number":"24.","word":"throw in"},{"number":"25.","word":"for good measure"},{"number":"26.","word":"rural"},{"number":"27.","word":"surroundings"},{"number":"28.","word":"heaven"},{"number":"29.","word":"breeze"},{"number":"30.","word":"guarantee"},{"number":"31.","word":"jazz"},{"number":"32.","word":"arch"},{"number":"33.","word":"adaptation"},{"number":"34.","word":"communist"},{"number":"35.","word":"invader"},{"number":"36.","word":"consist of"},{"number":"37.","word":"defend"},{"number":"38.","word":"solo"},{"number":"39.","word":"flow"},{"number":"40.","word":"mankind"},{"number":"41.","word":"spacecraft"},{"number":"42.","word":"solar"},{"number":"43.","word":"greet"},{"number":"44.","word":"get down to sth."},{"number":"45.","word":"suitable"},{"number":"46.","word":"recording"},{"number":"47.","word":"distant"},{"number":"48.","word":"volume"},{"number":"49.","word":"stare"},{"number":"50.","word":"breath"},{"number":"51.","word":"unusual"},{"number":"52.","word":"grab"},{"number":"53.","word":"sweep"},{"number":"54.","word":"disc"},{"number":"55.","word":"complicated"},{"number":"56.","word":"lane"},{"number":"57.","word":"accompany"},{"number":"58.","word":"expectation"},{"number":"59.","word":"remarkable"},{"number":"60.","word":"stream"},{"number":"61.","word":"enthusiastic"},{"number":"62.","word":"handkerchief"},{"number":"63.","word":"vast"},{"number":"64.","word":"gifted"},{"number":"65.","word":"reputation"},{"number":"66.","word":"brilliant"},{"number":"67.","word":"prediction"},{"number":"68.","word":"extraordinary"},{"number":"69.","word":"depress"},{"number":"70.","word":"upset"},{"number":"71.","word":"possess"},{"number":"72.","word":"abandon"},{"number":"73.","word":"all of a sudden"},{"number":"74.","word":"orchestra"},{"number":"75.","word":"desperate"},{"number":"76.","word":"uplifting"},{"number":"77.","word":"ease"},{"number":"78.","word":"genius"},{"number":"79.","word":"variation"},{"number":"80.","word":"chorus"},{"number":"81.","word":"grand"},{"number":"82.","word":"finale"},{"number":"83.","word":"rhythm"}],"shuffledWords":["symphony","guarantee","ease","possess","grave","unusual","Austrian","orchestra","depress","variation","handkerchief","expectation","whisper","weep","overcome","invader","upset","surroundings","heaven","combine","consist of","sweep","stream","solar","mankind","tune","throw in","prediction","lane","brilliant","spacecraft","grand","remarkable","get down to sth.","gifted","disc","composer","pleasant","abandon","complicated","blues","defend","distant","suitable","breeze","genius","sorrow","transform","deserve","forever","folk","for good measure","Polish","desperate","all of a sudden","flow","grab","lyric","concerto","communist","finale","reputation","arch","solo","jazz","recording","rhythm","rely on","vast","stare","breath","dramatic","uplifting","tear apart","rural","greet","volume","extraordinary","enthusiastic","accompany","compose","chorus","adaptation"],"column":"auto","fontSize":32};
+  const UNIT_U3 = {"version":1,"items":[{"number":"1.","word":"portrait"},{"number":"2.","word":"landscape"},{"number":"3.","word":"wander"},{"number":"4.","word":"gallery"},{"number":"5.","word":"decade"},{"number":"6.","word":"mostly"},{"number":"7.","word":"pond"},{"number":"8.","word":"canvas"},{"number":"9.","word":"neighbourhood"},{"number":"10.","word":"strike"},{"number":"11.","word":"setting"},{"number":"12.","word":"like-minded"},{"number":"13.","word":"liberation"},{"number":"14.","word":"opposed"},{"number":"15.","word":"as opposed to"},{"number":"16.","word":"dominate"},{"number":"17.","word":"employ"},{"number":"18.","word":"brushwork"},{"number":"19.","word":"realistic"},{"number":"20.","word":"essence"},{"number":"21.","word":"vivid"},{"number":"22.","word":"vision"},{"number":"23.","word":"display"},{"number":"24.","word":"worthy"},{"number":"25.","word":"calling"},{"number":"26.","word":"shade"},{"number":"27.","word":"bathe"},{"number":"28.","word":"pixel"},{"number":"29.","word":"wage"},{"number":"30.","word":"campaign"},{"number":"31.","word":"architecture"},{"number":"32.","word":"toast"},{"number":"33.","word":"garlic"},{"number":"34.","word":"mushroom"},{"number":"35.","word":"arrange"},{"number":"36.","word":"raw"},{"number":"37.","word":"scroll"},{"number":"38.","word":"insight"},{"number":"39.","word":"crop"},{"number":"40.","word":"wind"},{"number":"41.","word":"sail"},{"number":"42.","word":"civilian"},{"number":"43.","word":"all walks of life"},{"number":"44.","word":"butcher"},{"number":"45.","word":"go about sth"},{"number":"46.","word":"apparent"},{"number":"47.","word":"ink"},{"number":"48.","word":"perspective"},{"number":"49.","word":"precise"},{"number":"50.","word":"ambitious"},{"number":"51.","word":"enormous"},{"number":"52.","word":"comprehensive"},{"number":"53.","word":"clothing"},{"number":"54.","word":"temple"},{"number":"55.","word":"structure"},{"number":"56.","word":"overall"},{"number":"57.","word":"critic"},{"number":"58.","word":"inspection"},{"number":"59.","word":"expose"},{"number":"60.","word":"political"},{"number":"61.","word":"soldier"},{"number":"62.","word":"crisis"},{"number":"63.","word":"decline"},{"number":"64.","word":"overthrow"},{"number":"65.","word":"be down to"},{"number":"66.","word":"Scale"},{"number":"67.","word":"emperor"},{"number":"68.","word":"in one's own right"},{"number":"69.","word":"outstanding"},{"number":"70.","word":"exhibition"},{"number":"71.","word":"rare"},{"number":"72.","word":"speak volumes about"},{"number":"73.","word":"historic"},{"number":"74.","word":"career"}],"shuffledWords":["calling","soldier","sail","crop","wander","overall","Scale","canvas","employ","go about sth","precise","pixel","political","scroll","inspection","decline","worthy","exhibition","liberation","outstanding","comprehensive","garlic","expose","bathe","rare","crisis","landscape","all walks of life","speak volumes about","display","butcher","toast","as opposed to","career","mushroom","emperor","wage","vision","ambitious","realistic","pond","structure","raw","critic","strike","civilian","dominate","vivid","wind","mostly","opposed","apparent","shade","like-minded","neighbourhood","in one's own right","portrait","enormous","gallery","ink","campaign","overthrow","decade","perspective","brushwork","clothing","temple","insight","setting","arrange","architecture","be down to","historic","essence"],"column":"auto","fontSize":32};
+  const UNIT_U4 = {"version":1,"items":[{"number":"1.","word":"barren"},{"number":"2.","word":"frozen"},{"number":"3.","word":"imply"},{"number":"4.","word":"dimension"},{"number":"5.","word":"grasp"},{"number":"6.","word":"detect"},{"number":"7.","word":"rhyme"},{"number":"8.","word":"complex"},{"number":"9.","word":"contradictory"},{"number":"10.","word":"dig up"},{"number":"11.","word":"clue"},{"number":"12.","word":"cage"},{"number":"13.","word":"trill"},{"number":"14.","word":"interpret"},{"number":"15.","word":"patience"},{"number":"16.","word":"aside"},{"number":"17.","word":"set sth aside"},{"number":"18.","word":"remote"},{"number":"19.","word":"reward"},{"number":"20.","word":"constantly"},{"number":"21.","word":"logical"},{"number":"22.","word":"inner"},{"number":"23.","word":"perceive"},{"number":"24.","word":"reality"},{"number":"25.","word":"mist"},{"number":"26.","word":"novelist"},{"number":"27.","word":"break with sth"},{"number":"28.","word":"ideal"},{"number":"29.","word":"rigid"},{"number":"30.","word":"undergo"},{"number":"31.","word":"industrialisation"},{"number":"32.","word":"advocate"},{"number":"33.","word":"belief"},{"number":"34.","word":"era"},{"number":"35.","word":"district"},{"number":"36.","word":"diverge"},{"number":"37.","word":"bend"},{"number":"38.","word":"claim"},{"number":"39.","word":"tread"},{"number":"40.","word":"sigh"},{"number":"41.","word":"hence"},{"number":"42.","word":"dare"},{"number":"43.","word":"dweller"},{"number":"44.","word":"striking"},{"number":"45.","word":"characterize"},{"number":"46.","word":"Confucianism"},{"number":"47.","word":"Taoism"},{"number":"48.","word":"legend"},{"number":"49.","word":"encounter"},{"number":"50.","word":"nourish"},{"number":"51.","word":"numerous"},{"number":"52.","word":"glorious"},{"number":"53.","word":"boom"},{"number":"54.","word":"stability"},{"number":"55.","word":"tolerant"},{"number":"56.","word":"liberty"},{"number":"57.","word":"unconstrained"},{"number":"58.","word":"vitality"},{"number":"59.","word":"distinguish"},{"number":"60.","word":"exaggeration"},{"number":"61.","word":"metaphor"},{"number":"62.","word":"representative"},{"number":"63.","word":"frost"},{"number":"64.","word":"cast"},{"number":"65.","word":"owe"},{"number":"66.","word":"debt"},{"number":"67.","word":"fascinate"},{"number":"68.","word":"entitle"},{"number":"69.","word":"blame"},{"number":"70.","word":"allowance"},{"number":"71.","word":"make allowance for"},{"number":"72.","word":"triumph"},{"number":"73.","word":"impostor"},{"number":"74.","word":"unforgiving"}],"shuffledWords":["contradictory","Taoism","unconstrained","belief","cast","rhyme","era","grasp","remote","impostor","perceive","unforgiving","mist","fascinate","imply","tolerant","dimension","detect","aside","striking","liberty","nourish","make allowance for","patience","dare","Confucianism","metaphor","representative","blame","undergo","industrialisation","boom","characterize","inner","diverge","debt","entitle","frozen","cage","set sth aside","break with sth","trill","rigid","sigh","constantly","legend","distinguish","stability","owe","ideal","frost","dweller","barren","advocate","claim","novelist","triumph","complex","vitality","clue","bend","allowance","tread","glorious","exaggeration","numerous","hence","logical","reward","reality","dig up","district","interpret","encounter"],"column":"auto","fontSize":32};
+
+  const U1_COL1 = {"version":1,"items":[{"number":"1.","word":"mood"},{"number":"2.","word":"combination"},{"number":"3.","word":"do the trick"},{"number":"4.","word":"creamy"},{"number":"5.","word":"flavo(u)r"},{"number":"6.","word":"greedily"},{"number":"7.","word":"gently"},{"number":"8.","word":"dessert"},{"number":"9.","word":"association"},{"number":"10.","word":"vary"},{"number":"11.","word":"link"},{"number":"12.","word":"emotion"},{"number":"13.","word":"saucer"},{"number":"14.","word":"vinegar"},{"number":"15.","word":"native"},{"number":"16.","word":"salty"}],"shuffledWords":["mood","greedily","association","flavo(u)r","combination","creamy","link","do the trick","saucer","salty","vinegar","vary","dessert","native","gently","emotion"],"column":"auto","fontSize":32};
+  const U1_COL2 = {"version":1,"items":[{"number":"1.","word":"sour"},{"number":"2.","word":"cry out for"},{"number":"3.","word":"relieve"},{"number":"4.","word":"bond"},{"number":"5.","word":"security"},{"number":"6.","word":"generate"},{"number":"7.","word":"calorie"},{"number":"8.","word":"digest"},{"number":"9.","word":"lower"},{"number":"10.","word":"cycle"},{"number":"11.","word":"enhance"},{"number":"12.","word":"throw oneself into"},{"number":"13.","word":"boil"},{"number":"14.","word":"fry"},{"number":"15.","word":"steak"},{"number":"16.","word":"pan"},{"number":"17.","word":"impress"},{"number":"18.","word":"buffet"},{"number":"19.","word":"bay"},{"number":"20.","word":"scenery"},{"number":"21.","word":"bet"}],"shuffledWords":["steak","generate","throw oneself into","cry out for","enhance","bet","relieve","pan","fry","security","bond","bay","digest","cycle","impress","lower","calorie","buffet","boil","sour","scenery"],"column":"auto","fontSize":32};
+  const U1_COL3 = {"version":1,"items":[{"number":"1.","word":"atmosphere"},{"number":"2.","word":"out of this world"},{"number":"3.","word":"version"},{"number":"4.","word":"flling"},{"number":"5.","word":"elderly"},{"number":"6.","word":"bake"},{"number":"7.","word":"flour"},{"number":"8.","word":"adorable"},{"number":"9.","word":"mild"},{"number":"10.","word":"tiramisu"},{"number":"11.","word":"bakery"},{"number":"12.","word":"layer"},{"number":"13.","word":"cheese"},{"number":"14.","word":"bitter"},{"number":"15.","word":"cream"},{"number":"16.","word":"ingredient"},{"number":"17.","word":"loose"},{"number":"18.","word":"let sth loose"},{"number":"19.","word":"chilli"},{"number":"20.","word":"pepper"},{"number":"21.","word":"Sichuan pepper"},{"number":"22.","word":"onion"},{"number":"23.","word":"spring onion"},{"number":"24.","word":"damp"},{"number":"25.","word":"foggy"},{"number":"26.","word":"dynasty"},{"number":"27.","word":"expand"},{"number":"28.","word":"multiple"},{"number":"29.","word":"sauce"},{"number":"30.","word":"plain"}],"shuffledWords":["atmosphere","pepper","bakery","elderly","chilli","version","bitter","mild","cream","loose","flour","sauce","adorable","let sth loose","out of this world","multiple","plain","onion","Sichuan pepper","cheese","layer","tiramisu","ingredient","flling","expand","dynasty","foggy","spring onion","damp","bake"],"column":"auto","fontSize":32};
+  const U1_COL4 = {"version":1,"items":[{"number":"1.","word":"slice"},{"number":"2.","word":"chef"},{"number":"3.","word":"property"},{"number":"4.","word":"appropriate"},{"number":"5.","word":"estimate"},{"number":"6.","word":"consume"},{"number":"7.","word":"hit the spot"},{"number":"8.","word":"dim sum"},{"number":"9.","word":"essential"},{"number":"10.","word":"innovation"},{"number":"11.","word":"concept"},{"number":"12.","word":"stimulate"},{"number":"13.","word":"appetite"},{"number":"14.","word":"delicate"},{"number":"15.","word":"emphasis"},{"number":"16.","word":"steam"},{"number":"17.","word":"gram"},{"number":"18.","word":"cabbage"},{"number":"19.","word":"wrapper"},{"number":"20.","word":"mixture"},{"number":"21.","word":"edge"},{"number":"22.","word":"apart"},{"number":"23.","word":"fall apart"}],"shuffledWords":["dim sum","emphasis","cabbage","appetite","steam","slice","stimulate","estimate","appropriate","wrapper","mixture","apart","edge","concept","essential","fall apart","hit the spot","consume","innovation","delicate","chef","property","gram"],"column":"auto","fontSize":32};
+  const U1_COL5 = {"version":1,"items":[{"number":"1.","word":"Austrian"},{"number":"2.","word":"composer"},{"number":"3.","word":"symphony"},{"number":"4.","word":"concerto"},{"number":"5.","word":"Polish"},{"number":"6.","word":"compose"},{"number":"7.","word":"deserve"},{"number":"8.","word":"tear apart"},{"number":"9.","word":"pleasant"},{"number":"10.","word":"whisper"},{"number":"11.","word":"dramatic"},{"number":"12.","word":"weep"},{"number":"13.","word":"overcome"},{"number":"14.","word":"sorrow"},{"number":"15.","word":"grave"},{"number":"16.","word":"transform"},{"number":"17.","word":"forever"},{"number":"18.","word":"combine"},{"number":"19.","word":"rely on"},{"number":"20.","word":"blues"},{"number":"21.","word":"folk"}],"shuffledWords":["Austrian","whisper","Polish","symphony","folk","dramatic","concerto","transform","compose","sorrow","grave","blues","composer","forever","pleasant","combine","weep","tear apart","deserve","overcome","rely on"],"column":"auto","fontSize":32};
+  const U1_COL6 = {"version":1,"items":[{"number":"1.","word":"tune"},{"number":"2.","word":"lyric"},{"number":"3.","word":"throw in"},{"number":"4.","word":"for good measure"},{"number":"5.","word":"rural"},{"number":"6.","word":"surroundings"},{"number":"7.","word":"heaven"},{"number":"8.","word":"breeze"},{"number":"9.","word":"guarantee"},{"number":"10.","word":"jazz"},{"number":"11.","word":"arch"},{"number":"12.","word":"adaptation"},{"number":"13.","word":"communist"},{"number":"14.","word":"invader"},{"number":"15.","word":"consist of"},{"number":"16.","word":"defend"},{"number":"17.","word":"solo"},{"number":"18.","word":"flow"},{"number":"19.","word":"mankind"},{"number":"20.","word":"spacecraft"},{"number":"21.","word":"solar"},{"number":"22.","word":"greet"},{"number":"23.","word":"get down to sth."},{"number":"24.","word":"suitable"},{"number":"25.","word":"recording"}],"shuffledWords":["consist of","heaven","greet","surroundings","suitable","solo","mankind","spacecraft","arch","tune","communist","rural","recording","defend","throw in","flow","solar","adaptation","get down to sth.","invader","lyric","for good measure","jazz","guarantee","breeze"],"column":"auto","fontSize":32};
+  const U1_COL7 = {"version":1,"items":[{"number":"1.","word":"distant"},{"number":"2.","word":"volume"},{"number":"3.","word":"stare"},{"number":"4.","word":"breath"},{"number":"5.","word":"unusual"},{"number":"6.","word":"grab"},{"number":"7.","word":"sweep"},{"number":"8.","word":"disc"},{"number":"9.","word":"complicated"},{"number":"10.","word":"lane"},{"number":"11.","word":"accompany"},{"number":"12.","word":"expectation"},{"number":"13.","word":"remarkable"},{"number":"14.","word":"stream"},{"number":"15.","word":"enthusiastic"},{"number":"16.","word":"handkerchief"},{"number":"17.","word":"vast"},{"number":"18.","word":"gifted"},{"number":"19.","word":"reputation"}],"shuffledWords":["breath","lane","vast","accompany","unusual","reputation","enthusiastic","sweep","expectation","stream","distant","volume","stare","disc","remarkable","gifted","handkerchief","complicated","grab"],"column":"auto","fontSize":32};
+  const U1_COL8 = {"version":1,"items":[{"number":"1.","word":"brilliant"},{"number":"2.","word":"prediction"},{"number":"3.","word":"extraordinary"},{"number":"4.","word":"depress"},{"number":"5.","word":"upset"},{"number":"6.","word":"possess"},{"number":"7.","word":"abandon"},{"number":"8.","word":"all of a sudden"},{"number":"9.","word":"orchestra"},{"number":"10.","word":"desperate"},{"number":"11.","word":"uplifting"},{"number":"12.","word":"ease"},{"number":"13.","word":"genius"},{"number":"14.","word":"variation"},{"number":"15.","word":"chorus"},{"number":"16.","word":"grand"},{"number":"17.","word":"finale"},{"number":"18.","word":"rhythm"},{"number":"19.","word":"portrait"},{"number":"20.","word":"landscape"},{"number":"21.","word":"wander"}],"shuffledWords":["abandon","possess","desperate","portrait","ease","finale","extraordinary","landscape","all of a sudden","brilliant","genius","rhythm","variation","uplifting","orchestra","wander","grand","depress","prediction","upset","chorus"],"column":"auto","fontSize":32};
+  const U1_COL9 = {"version":1,"items":[{"number":"1.","word":"gallery"},{"number":"2.","word":"decade"},{"number":"3.","word":"mostly"},{"number":"4.","word":"pond"},{"number":"5.","word":"canvas"},{"number":"6.","word":"neighbourhood"},{"number":"7.","word":"strike"},{"number":"8.","word":"setting"},{"number":"9.","word":"like-minded"},{"number":"10.","word":"liberation"},{"number":"11.","word":"opposed"},{"number":"12.","word":"as opposed to"},{"number":"13.","word":"dominate"},{"number":"14.","word":"employ"},{"number":"15.","word":"brushwork"},{"number":"16.","word":"realistic"},{"number":"17.","word":"essence"},{"number":"18.","word":"vivid"},{"number":"19.","word":"vision"},{"number":"20.","word":"display"},{"number":"21.","word":"worthy"},{"number":"22.","word":"calling"},{"number":"23.","word":"shade"},{"number":"24.","word":"bathe"}],"shuffledWords":["calling","like-minded","dominate","strike","employ","vision","as opposed to","essence","vivid","shade","mostly","bathe","decade","gallery","brushwork","pond","worthy","display","canvas","opposed","neighbourhood","liberation","realistic","setting"],"column":"auto","fontSize":32};
+  const U1_COL10 = {"version":1,"items":[{"number":"1.","word":"pixel"},{"number":"2.","word":"wage"},{"number":"3.","word":"campaign"},{"number":"4.","word":"architecture"},{"number":"5.","word":"toast"},{"number":"6.","word":"garlic"},{"number":"7.","word":"mushroom"},{"number":"8.","word":"arrange"},{"number":"9.","word":"raw"},{"number":"10.","word":"scroll"},{"number":"11.","word":"insight"},{"number":"12.","word":"crop"},{"number":"13.","word":"wind"},{"number":"14.","word":"sail"},{"number":"15.","word":"civilian"},{"number":"16.","word":"all walks of life"},{"number":"17.","word":"butcher"},{"number":"18.","word":"go about sth"},{"number":"19.","word":"apparent"},{"number":"20.","word":"ink"},{"number":"21.","word":"perspective"},{"number":"22.","word":"precise"},{"number":"23.","word":"ambitious"}],"shuffledWords":["garlic","go about sth","wind","wage","toast","ink","butcher","perspective","architecture","pixel","all walks of life","apparent","crop","scroll","campaign","precise","sail","civilian","ambitious","mushroom","insight","arrange","raw"],"column":"auto","fontSize":32};
+  const U1_COL11 = {"version":1,"items":[{"number":"1.","word":"enormous"},{"number":"2.","word":"comprehensive"},{"number":"3.","word":"clothing"},{"number":"4.","word":"temple"},{"number":"5.","word":"structure"},{"number":"6.","word":"overall"},{"number":"7.","word":"critic"},{"number":"8.","word":"inspection"},{"number":"9.","word":"expose"},{"number":"10.","word":"political"},{"number":"11.","word":"soldier"},{"number":"12.","word":"crisis"},{"number":"13.","word":"decline"},{"number":"14.","word":"overthrow"},{"number":"15.","word":"be down to"},{"number":"16.","word":"Scale"},{"number":"17.","word":"emperor"},{"number":"18.","word":"in one's own right"},{"number":"19.","word":"outstanding"},{"number":"20.","word":"exhibition"},{"number":"21.","word":"rare"},{"number":"22.","word":"speak volumes about"},{"number":"23.","word":"historic"}],"shuffledWords":["rare","structure","clothing","decline","critic","expose","exhibition","historic","be down to","emperor","in one's own right","comprehensive","temple","outstanding","overthrow","overall","enormous","soldier","speak volumes about","Scale","inspection","political","crisis"],"column":"auto","fontSize":32};
+  const U1_COL12 = {"version":1,"items":[{"number":"1.","word":"career"},{"number":"2.","word":"barren"},{"number":"3.","word":"frozen"},{"number":"4.","word":"imply"},{"number":"5.","word":"dimension"},{"number":"6.","word":"grasp"},{"number":"7.","word":"detect"},{"number":"8.","word":"rhyme"},{"number":"9.","word":"complex"},{"number":"10.","word":"contradictory"},{"number":"11.","word":"dig up"},{"number":"12.","word":"clue"},{"number":"13.","word":"cage"},{"number":"14.","word":"trill"},{"number":"15.","word":"interpret"},{"number":"16.","word":"patience"},{"number":"17.","word":"aside"},{"number":"18.","word":"set sth aside"}],"shuffledWords":["grasp","barren","contradictory","interpret","dimension","frozen","cage","patience","trill","imply","detect","aside","complex","rhyme","clue","set sth aside","dig up","career"],"column":"auto","fontSize":32};
+  const U1_COL13 = {"version":1,"items":[{"number":"1.","word":"remote"},{"number":"2.","word":"reward"},{"number":"3.","word":"constantly"},{"number":"4.","word":"logical"},{"number":"5.","word":"inner"},{"number":"6.","word":"perceive"},{"number":"7.","word":"reality"},{"number":"8.","word":"mist"},{"number":"9.","word":"novelist"},{"number":"10.","word":"break with sth"},{"number":"11.","word":"ideal"},{"number":"12.","word":"rigid"},{"number":"13.","word":"undergo"},{"number":"14.","word":"industrialisation"},{"number":"15.","word":"advocate"},{"number":"16.","word":"belief"},{"number":"17.","word":"era"},{"number":"18.","word":"district"},{"number":"19.","word":"diverge"},{"number":"20.","word":"bend"},{"number":"21.","word":"claim"},{"number":"22.","word":"tread"}],"shuffledWords":["inner","remote","diverge","reality","industrialisation","novelist","mist","belief","district","advocate","constantly","claim","reward","bend","logical","rigid","break with sth","undergo","era","ideal","tread","perceive"],"column":"auto","fontSize":32};
+  const U1_COL14 = {"version":1,"items":[{"number":"1.","word":"sigh"},{"number":"2.","word":"hence"},{"number":"3.","word":"dare"},{"number":"4.","word":"dweller"},{"number":"5.","word":"striking"},{"number":"6.","word":"characterize"},{"number":"7.","word":"Confucianism"},{"number":"8.","word":"Taoism"},{"number":"9.","word":"legend"},{"number":"10.","word":"encounter"},{"number":"11.","word":"nourish"},{"number":"12.","word":"numerous"},{"number":"13.","word":"glorious"},{"number":"14.","word":"boom"},{"number":"15.","word":"stability"},{"number":"16.","word":"tolerant"},{"number":"17.","word":"liberty"},{"number":"18.","word":"unconstrained"},{"number":"19.","word":"vitality"},{"number":"20.","word":"distinguish"},{"number":"21.","word":"exaggeration"},{"number":"22.","word":"metaphor"},{"number":"23.","word":"representative"}],"shuffledWords":["encounter","striking","Taoism","numerous","metaphor","tolerant","dare","boom","exaggeration","Confucianism","representative","distinguish","characterize","unconstrained","stability","hence","vitality","sigh","dweller","nourish","legend","liberty","glorious"],"column":"auto","fontSize":32};
+  const U1_COL15 = {"version":1,"items":[{"number":"1.","word":"frost"},{"number":"2.","word":"cast"},{"number":"3.","word":"owe"},{"number":"4.","word":"debt"},{"number":"5.","word":"fascinate"},{"number":"6.","word":"entitle"},{"number":"7.","word":"blame"},{"number":"8.","word":"allowance"},{"number":"9.","word":"make allowance for"},{"number":"10.","word":"triumph"},{"number":"11.","word":"impostor"},{"number":"12.","word":"unforgiving"}],"shuffledWords":["frost","blame","unforgiving","owe","allowance","entitle","cast","impostor","fascinate","triumph","make allowance for","debt"],"column":"auto","fontSize":32};
+
+  const BUILTIN_WORD_SETS = {
+    "u1": UNIT_U1, "u2": UNIT_U2, "u3": UNIT_U3, "u4": UNIT_U4,
+    "u1_col1": U1_COL1, "u1_col2": U1_COL2, "u1_col3": U1_COL3, "u1_col4": U1_COL4,
+    "u1_col5": U1_COL5, "u1_col6": U1_COL6, "u1_col7": U1_COL7, "u1_col8": U1_COL8,
+    "u1_col9": U1_COL9, "u1_col10": U1_COL10, "u1_col11": U1_COL11, "u1_col12": U1_COL12,
+    "u1_col13": U1_COL13, "u1_col14": U1_COL14, "u1_col15": U1_COL15
+  };
+
+  let USER_WORD_SETS = {};
+  const EMBEDDED_BACKUP = window.__EMBEDDED_BACKUP__ || null;
+  const EMBEDDED_USER_WORD_SETS = window.__EMBEDDED_USER_WORD_SETS__ || null;
+
+  const fileInput = document.getElementById('fileInput');
+  const wordInput = document.getElementById('wordInput');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const sampleBtn = document.getElementById('sampleBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const reshuffleBtn = document.getElementById('reshuffleBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const printBtn = document.getElementById('printBtn');
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  const wordBoard = document.getElementById('wordBoard');
+  const statsSpan = document.getElementById('stats');
+  const statusBox = document.getElementById('statusBox');
+  const errorBox = document.getElementById('errorBox');
+  const columnSelect = document.getElementById('columnSelect');
+  const fontSizeInput = document.getElementById('fontSizeInput');
+  const exportJsonBtn = document.getElementById('exportJsonBtn');
+  const importJsonBtn = document.getElementById('importJsonBtn');
+  const exportHtmlBtn = document.getElementById('exportHtmlBtn');
+  const jsonFileInput = document.getElementById('jsonFileInput');
+  const wordSetSelect = document.getElementById('wordSetSelect');
+  const addWordSetBtn = document.getElementById('addWordSetBtn');
+  const wordSetFileInput = document.getElementById('wordSetFileInput');
+
+  let parsedItems = [];
+  let currentShuffledWords = [];
+  let importedStructuredItems = null;
+
+  const sampleText = "1. apple\n2. take off\n3. beautiful\n4. look forward to\n5. environment\n6. make a decision\n7. important\n8. in front of\n9. carefully\n10. have a good time\n11. communicate\n12. as soon as possible";
+
+  function showError(msg) {
+    if (!msg) { errorBox.style.display = 'none'; errorBox.textContent = ''; return; }
+    statusBox.style.display = 'none'; statusBox.textContent = '';
+    errorBox.style.display = 'block'; errorBox.textContent = msg;
+  }
+  function showStatus(msg) {
+    if (!msg) { statusBox.style.display = 'none'; statusBox.textContent = ''; return; }
+    errorBox.style.display = 'none'; errorBox.textContent = '';
+    statusBox.style.display = 'block'; statusBox.textContent = msg;
+  }
+  function normalizeLine(line) { return String(line || '').replace(/^\uFEFF/, '').trim(); }
+  function cleanCell(value) { return (value === undefined || value === null) ? '' : String(value).replace(/\s+/g, ' ').trim(); }
+  function looksLikeHeader(row) {
+    const joined = row.map(cleanCell).join('').toLowerCase();
+    if (!joined) return true;
+    return /^(序号|编号|no\.?|number|单词|词汇|word|phrase|短语)+$/i.test(joined.replace(/[\s_\-:：]/g, ''));
+  }
+  function makeAutoNumber(index) { return String(index + 1) + '.'; }
+
+  function parseLine(line, fallbackIndex) {
+    const trimmed = normalizeLine(line);
+    if (!trimmed) return null;
+    const patterns = [
+      /^((?:\d+|[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑰⑱⑲⑳]|[一二三四五六七八九十]+|[A-Za-z])\s*[\.、\)）:：-]\s*)(.+)$/,
+      /^((?:Unit|Lesson|Module|U|L)\s*\d+(?:\s*[-–—.]\s*\d+)?\s*[\.、\)）:：-]?\s+)(.+)$/i,
+      /^((?:\d+\s*[-–—.]\s*\d+)\s*[\.、\)）:：-]?\s+)(.+)$/
+    ];
+    for (const pattern of patterns) {
+      const match = trimmed.match(pattern);
+      if (match && cleanCell(match[2])) {
+        return { number: match[1].trim(), word: match[2].trim() };
+      }
+    }
+    return { number: makeAutoNumber(fallbackIndex), word: trimmed };
+  }
+
+  function parseTextInput(text) {
+    const lines = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+    return lines.map((line, idx) => parseLine(line, idx)).filter(Boolean).filter(item => item.word.length > 0);
+  }
+
+  function parseRowsToItems(rows) {
+    const items = [];
+    for (let row of rows) {
+      const cells = Array.isArray(row) ? row.map(cleanCell).filter(Boolean) : [];
+      if (!cells.length) continue;
+      if (items.length === 0 && looksLikeHeader(cells)) continue;
+      if (cells.length >= 2) {
+        const first = cells[0];
+        const rest = cells.slice(1).join(' ').trim();
+        if (first && rest) { items.push({ number: first, word: rest }); continue; }
+      }
+      const parsed = parseLine(cells.join(' '), items.length);
+      if (parsed) items.push(parsed);
+    }
+    return items;
+  }
+
+  function itemsToEditableText(items) {
+    return items.map(item => item.number + ' ' + item.word).join('\n');
+  }
+
+  function getFileExtension(fileName) {
+    const match = String(fileName || '').toLowerCase().match(/\.([^.]+)$/);
+    return match ? match[1] : '';
+  }
+
+  function readAsText(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result || '');
+      reader.onerror = () => reject(new Error('文件读取失败'));
+      reader.readAsText(file, 'UTF-8');
+    });
+  }
+  function readAsArrayBuffer(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.onerror = () => reject(new Error('文件读取失败'));
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
+  async function extractTextFromDocx(file) {
+    if (!window.mammoth) throw new Error('Word解析库未加载，请联网重试');
+    const arrayBuffer = await readAsArrayBuffer(file);
+    const result = await window.mammoth.extractRawText({ arrayBuffer });
+    return result.value || '';
+  }
+
+  async function extractItemsFromExcel(file) {
+    if (!window.XLSX) throw new Error('Excel解析库未加载');
+    const arrayBuffer = await readAsArrayBuffer(file);
+    const workbook = window.XLSX.read(arrayBuffer, { type: 'array' });
+    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = window.XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: '', raw: false, blankrows: false });
+    return parseRowsToItems(rows);
+  }
+
+  async function handleFile(file) {
+    showError(''); showStatus('读取文件中...');
+    importedStructuredItems = null;
+    const ext = getFileExtension(file.name);
+    try {
+      if (['txt','text','csv'].includes(ext)) {
+        const text = await readAsText(file);
+        wordInput.value = text;
+        showStatus('✅ 已导入 ' + file.name);
+        generateShuffle();
+        return;
+      }
+      if (['xlsx','xls'].includes(ext)) {
+        const items = await extractItemsFromExcel(file);
+        importedStructuredItems = items;
+        wordInput.value = itemsToEditableText(items);
+        showStatus('📊 Excel导入成功，共 ' + items.length + ' 项');
+        generateShuffle();
+        return;
+      }
+      if (ext === 'docx') {
+        const text = await extractTextFromDocx(file);
+        wordInput.value = text;
+        showStatus('📄 Word文档内容已提取');
+        generateShuffle();
+        return;
+      }
+      if (ext === 'doc') {
+        showError('暂不支持旧版.doc文件，请另存为.docx后再导入。');
+        return;
+      }
+      showError('请上传 .docx / .xlsx / .txt / .csv 文件');
+    } catch (err) {
+      showError(err.message || '文件解析失败');
+    }
+  }
+
+  function parseCurrentInput() {
+    if (importedStructuredItems && wordInput.value.trim() === itemsToEditableText(importedStructuredItems).trim()) {
+      return importedStructuredItems;
+    }
+    return parseTextInput(wordInput.value);
+  }
+
+  function shuffleArray(arr) {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+  
+  /* 判断全屏布局：分列词库 vs 单元词库 */
+  function isColumnWordSet() {
+    const key = wordSetSelect ? String(wordSetSelect.value || '') : '';
+    if (/_col/i.test(key)) return true;
+    if (/^u\d+$/i.test(key)) {
+        const builtin = BUILTIN_WORD_SETS[key];
+        if (builtin && parsedItems.length === builtin.items.length) return false;
+    }
+    const count = parsedItems.length;
+    if (count === 0) return false;
+    return count <= 50;
+  }
+  
+  function getFullscreenLayoutConfig() {
+    const columnMode = isColumnWordSet();
+    return columnMode
+      ? { kind: 'column', cols: 5, rows: 6, fontSize: 36 }
+      : { kind: 'unit', cols: 6, rows: 15, fontSize: 32 };
+  }
+  
+  function estimateWordSpan(word, cfg) {
+    const boardWidth = wordBoard && wordBoard.clientWidth
+      ? wordBoard.clientWidth
+      : window.innerWidth;
+    const safeBoardWidth = Math.max(320, boardWidth - 8);
+    const cellWidth = safeBoardWidth / cfg.cols;
+    const text = '88' + String(word || '');
+    let textWidth = 0;
+    try {
+      const canvas = estimateWordSpan._canvas || (estimateWordSpan._canvas = document.createElement('canvas'));
+      const ctx = canvas.getContext('2d');
+      ctx.font = cfg.fontSize + 'px "Times New Roman", Times, serif';
+      textWidth = ctx.measureText(text).width;
+    } catch (e) {
+      textWidth = text.length * cfg.fontSize * 0.52;
+    }
+    const allowedWidth = cellWidth * 0.92;
+    const span = Math.ceil(textWidth / allowedWidth);
+    return Math.max(1, Math.min(cfg.cols, span));
+  }
+  
+  function packWordsForGrid(words, cfg, randomize) {
+    let pool = words.map((word, order) => ({
+      word,
+      order,
+      span: estimateWordSpan(word, cfg)
+    }));
+    if (randomize) {
+      pool = shuffleArray(pool);
+    }
+    const output = [];
+    while (pool.length) {
+      let remaining = cfg.cols;
+      let placedInThisRow = false;
+      while (pool.length && remaining > 0) {
+        let candidates = pool
+          .map((item, index) => ({ item, index }))
+          .filter(entry => entry.item.span <= remaining);
+        if (remaining === 1) {
+          const singleCandidates = candidates.filter(entry => entry.item.span === 1);
+          if (singleCandidates.length) {
+            candidates = singleCandidates;
+          }
+        }
+        if (!candidates.length) break;
+        const chosen = randomize
+          ? candidates[Math.floor(Math.random() * candidates.length)]
+          : candidates[0];
+        output.push(chosen.item.word);
+        remaining -= chosen.item.span;
+        pool.splice(chosen.index, 1);
+        placedInThisRow = true;
+      }
+      if (!placedInThisRow && pool.length) {
+        output.push(pool.shift().word);
+      }
+    }
+    return output;
+  }
+  
+  function aestheticShuffleWords(wordArray) {
+    if (!wordArray.length) return [];
+    const cfg = getFullscreenLayoutConfig();
+    return packWordsForGrid(wordArray, cfg, true);
+  }
+
+  function escapeHTML(str) {
+    return String(str).replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  function getGridClass() { return 'word-grid ' + columnSelect.value; }
+  function applyFontSize() {
+    const isFullscreen = document.body.classList.contains('fullscreen-mode');
+    if (isFullscreen) {
+      const cfg = getFullscreenLayoutConfig();
+      document.documentElement.style.setProperty('--word-size', cfg.fontSize + 'px');
+      document.documentElement.style.setProperty('--number-size', cfg.fontSize + 'px');
+      return;
+    }
+    let wordSize = Math.min(72, Math.max(24, Number(fontSizeInput.value) || 32));
+    let numberSize = Math.max(20, Math.round(wordSize * 0.82));
+    document.documentElement.style.setProperty('--word-size', wordSize + 'px');
+    document.documentElement.style.setProperty('--number-size', numberSize + 'px');
+  }
+
+  function renderBoard() {
+    applyFontSize();
+    const isFullscreen = document.body.classList.contains('fullscreen-mode');
+    wordBoard.classList.remove('few-words');
+    if (!parsedItems.length || !currentShuffledWords.length) {
+      wordBoard.innerHTML = '<div class="empty">✨ 请导入单词或粘贴列表，点击「生成乱序」<br>保留原始序号，单词随机排序</div>';
+      statsSpan.textContent = '0 个单词';
+      return;
+    }
+    if (isFullscreen) {
+      const cfg = getFullscreenLayoutConfig();
+      currentShuffledWords = packWordsForGrid(currentShuffledWords, cfg, false);
+      const layoutClass = cfg.kind === 'column' ? 'fullscreen-column' : 'fullscreen-unit';
+      const cards = parsedItems.map((item, idx) => {
+        const shuffledWord = currentShuffledWords[idx] || '';
+        const span = estimateWordSpan(shuffledWord, cfg);
+        return ''
+          + '<div class="word-card" style="--span:' + span + ';">'
+          +   '<div class="number">' + escapeHTML(item.number).replace(/\.$/, '') + '</div>'
+          +   '<div class="word">' + escapeHTML(shuffledWord) + '</div>'
+          + '</div>';
+      }).join('');
+      wordBoard.innerHTML = '<div class="word-grid fullscreen-grid ' + layoutClass + '">' + cards + '</div>';
+      statsSpan.textContent = parsedItems.length + ' 个单词 · '
+        + (cfg.kind === 'column' ? '5列×6行' : '6列×15行')
+        + ' · 全屏投屏版';
+      return;
+    }
+    const cards = parsedItems.map((item, idx) => {
+      const shuffledWord = currentShuffledWords[idx] || '';
+      return '<div class="word-card"><div class="number">' + escapeHTML(item.number) + '</div><div class="word">' + escapeHTML(shuffledWord) + '</div></div>';
+    }).join('');
+    wordBoard.innerHTML = '<div class="' + getGridClass() + '">' + cards + '</div>';
+    statsSpan.textContent = parsedItems.length + ' 个单词 · 序号保留 · 随机排列';
+  }
+
+  function generateShuffle() {
+    showError('');
+    parsedItems = parseCurrentInput();
+    if (!parsedItems.length) {
+      currentShuffledWords = [];
+      renderBoard();
+      showError('未识别到有效单词，请检查格式（例: 1. apple 或 apple）');
+      return;
+    }
+    const words = parsedItems.map(i => i.word);
+    currentShuffledWords = aestheticShuffleWords(words);
+    renderBoard();
+    showStatus('✨ 已美观乱序 ' + parsedItems.length + ' 项单词，相似长度单词聚集排列');
+  }
+
+  function reshuffleCurrent() {
+    if (!parsedItems.length) { generateShuffle(); return; }
+    const words = parsedItems.map(i => i.word);
+    currentShuffledWords = aestheticShuffleWords(words);
+    renderBoard();
+    showStatus('🔄 再次美观随机排序完成');
+  }
+
+  async function copyResult() {
+    if (!parsedItems.length || !currentShuffledWords.length) {
+      showError('没有乱序结果可复制'); return;
+    }
+    const lines = parsedItems.map((item, idx) => item.number + ' ' + currentShuffledWords[idx]).join('\n');
+    try {
+      await navigator.clipboard.writeText(lines);
+      showStatus('✅ 已复制 ' + parsedItems.length + ' 行到剪贴板');
+    } catch(e) { showError('复制失败，可以手动选择复制'); }
+  }
+
+  function clearAll() {
+    wordInput.value = ''; fileInput.value = '';
+    parsedItems = []; currentShuffledWords = []; importedStructuredItems = null;
+    showError(''); showStatus('');
+    renderBoard();
+  }
+
+  function toggleFullscreen() {
+    const willEnterFullscreen = !document.body.classList.contains('fullscreen-mode');
+    document.body.classList.toggle('fullscreen-mode');
+    fullscreenBtn.textContent = document.body.classList.contains('fullscreen-mode')
+      ? '✖️ 退出'
+      : '🖥️ 全屏';
+    if (willEnterFullscreen && parsedItems.length && currentShuffledWords.length) {
+      const cfg = getFullscreenLayoutConfig();
+      currentShuffledWords = packWordsForGrid(currentShuffledWords, cfg, false);
+    }
+    renderBoard();
+  }
+
+  function buildBackupObject() {
+    return {
+      version: 1,
+      items: parsedItems.map(item => ({ number: item.number, word: item.word })),
+      shuffledWords: [...currentShuffledWords],
+      column: columnSelect.value,
+      fontSize: Number(fontSizeInput.value) || 32
+    };
+  }
+
+  function restoreFromBackup(backup, setName) {
+    if (!backup || !Array.isArray(backup.items)) {
+      throw new Error('备份数据无效：缺少 items 数组');
+    }
+    parsedItems = backup.items.map(i => ({ number: i.number, word: i.word }));
+    let shuffled = Array.isArray(backup.shuffledWords) ? [...backup.shuffledWords] : [];
+    if (shuffled.length !== parsedItems.length) {
+      shuffled = aestheticShuffleWords(parsedItems.map(i => i.word));
+    }
+    currentShuffledWords = shuffled;
+    if (backup.column && ['auto','one','two','three','four'].includes(backup.column)) {
+      columnSelect.value = backup.column;
+    }
+    if (typeof backup.fontSize === 'number') {
+      fontSizeInput.value = Math.min(72, Math.max(24, backup.fontSize));
+    }
+    wordInput.value = itemsToEditableText(parsedItems);
+    importedStructuredItems = null;
+    renderBoard();
+    if (setName) {
+      showStatus('📤 已加载词库：' + setName + '，共 ' + backup.items.length + ' 项');
+    }
+  }
+
+  function findOptionByValue(select, value) {
+    const escapedValue = value.replace(/"/g, '\\"');
+    return select.querySelector('option[value="' + escapedValue + '"]');
+  }
+
+  function loadWordSet(key) {
+    const builtin = BUILTIN_WORD_SETS[key];
+    if (builtin) {
+      const select = document.getElementById('wordSetSelect');
+      const option = select ? findOptionByValue(select, key) : null;
+      const setName = option ? option.textContent.trim() : key;
+      restoreFromBackup(builtin, setName);
+      return;
+    }
+    const userBackup = USER_WORD_SETS[key];
+    if (userBackup) {
+      const select = document.getElementById('wordSetSelect');
+      const option = select ? findOptionByValue(select, key) : null;
+      const setName = option ? option.textContent.trim() : key;
+      restoreFromBackup(userBackup, setName);
+      return;
+    }
+    const firstKey = Object.keys(BUILTIN_WORD_SETS)[0];
+    if (firstKey) {
+      showError('词库 "' + key + '" 未找到，已加载默认词库');
+      loadWordSet(firstKey);
+    } else {
+      showError('未找到该词库：' + key);
+    }
+  }
+
+  function updateUserWordSetsGroup() {
+    const select = document.getElementById('wordSetSelect');
+    if (!select) return;
+    const oldGroup = select.querySelector('optgroup#userWordSetsGroup');
+    const previousValue = select.value;
+    if (oldGroup) oldGroup.remove();
+    const keys = Object.keys(USER_WORD_SETS);
+    if (keys.length === 0) {
+      if (previousValue && !BUILTIN_WORD_SETS[previousValue] && !USER_WORD_SETS[previousValue]) {
+        select.value = Object.keys(BUILTIN_WORD_SETS)[0] || '';
+      }
+      return;
+    }
+    const optgroup = document.createElement('optgroup');
+    optgroup.id = 'userWordSetsGroup';
+    optgroup.label = '📁 用户词库';
+    keys.forEach(key => {
+      const backup = USER_WORD_SETS[key];
+      const wordCount = (backup && Array.isArray(backup.items)) ? backup.items.length : 0;
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = key + '（' + wordCount + '词）';
+      optgroup.appendChild(option);
+    });
+    select.appendChild(optgroup);
+    if (previousValue && (BUILTIN_WORD_SETS[previousValue] || USER_WORD_SETS[previousValue])) {
+      select.value = previousValue;
+    }
+  }
+
+  async function addWordSetFromJSON(file) {
+    showError('');
+    showStatus('正在解析词库文件...');
+    try {
+      const text = await readAsText(file);
+      const backup = JSON.parse(text);
+      if (!backup || !Array.isArray(backup.items) || backup.items.length === 0) {
+        showError('JSON文件格式无效：缺少有效的 items 数组');
+        return;
+      }
+      const validItems = backup.items.filter(item => item && item.word);
+      if (validItems.length === 0) {
+        showError('JSON文件格式无效：items 中没有找到单词数据');
+        return;
+      }
+      const normalizedBackup = {
+        version: backup.version || 1,
+        items: validItems.map((item, idx) => ({
+          number: item.number || makeAutoNumber(idx),
+          word: String(item.word).trim()
+        })),
+        shuffledWords: Array.isArray(backup.shuffledWords) ? [...backup.shuffledWords] : aestheticShuffleWords(validItems.map(i => String(i.word).trim())),
+        column: backup.column || 'auto',
+        fontSize: typeof backup.fontSize === 'number' ? backup.fontSize : 32
+      };
+      let setName = String(file.name || 'unknown').replace(/\.json$/i, '').trim();
+      if (!setName) setName = '未命名词库';
+      const wordCount = normalizedBackup.items.length;
+      USER_WORD_SETS[setName] = normalizedBackup;
+      updateUserWordSetsGroup();
+      const select = document.getElementById('wordSetSelect');
+      if (select) {
+        select.value = setName;
+      }
+      restoreFromBackup(normalizedBackup, setName + '（' + wordCount + '词）');
+      showStatus('📚 已添加词库「' + setName + '」（' + wordCount + '词）到词库列表，导出嵌入HTML即可永久保存');
+    } catch (err) {
+      showError('添加词库失败：' + (err.message || '无效的 JSON 文件'));
+    }
+  }
+
+  if (wordSetSelect) {
+    wordSetSelect.addEventListener('change', function() {
+      loadWordSet(this.value);
+    });
+  }
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function exportBackupJSON() {
+    if (!parsedItems.length) { showError('没有单词数据可导出'); return; }
+    const backup = buildBackupObject();
+    const json = JSON.stringify(backup, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    downloadBlob(blob, 'system_backup.json');
+    showStatus('✅ 备份文件 system_backup.json 已下载');
+  }
+
+  async function importJSONFile(file) {
+    try {
+      const text = await readAsText(file);
+      const backup = JSON.parse(text);
+      restoreFromBackup(backup, file.name);
+    } catch (err) {
+      showError('导入失败：' + (err.message || '无效的 JSON 文件'));
+    }
+  }
+
+  function exportEmbeddedHTML() {
+    if (!parsedItems.length) { showError('没有单词数据可嵌入'); return; }
+    const clone = document.documentElement.cloneNode(true);
+    clone.querySelectorAll('script').forEach(script => {
+      if (script.type === 'text/plain') return;
+      if (script.id === 'bootScript') return;
+      if (script.hasAttribute('data-embed-backup')) script.remove();
+      if (script.hasAttribute('data-embed-user-word-sets')) script.remove();
+    });
+    const backup = buildBackupObject();
+    const backupJSON = JSON.stringify(backup);
+    const embedScript = document.createElement('script');
+    embedScript.setAttribute('data-embed-backup', '');
+    embedScript.textContent = 'window.__EMBEDDED_BACKUP__ = ' + backupJSON + ';';
+    const userWordSetsScript = document.createElement('script');
+    userWordSetsScript.setAttribute('data-embed-user-word-sets', '');
+    userWordSetsScript.textContent = 'window.__EMBEDDED_USER_WORD_SETS__ = ' + JSON.stringify(USER_WORD_SETS) + ';';
+    const bootScript = clone.querySelector('#bootScript');
+    if (bootScript && bootScript.parentNode) {
+      bootScript.parentNode.insertBefore(userWordSetsScript, bootScript);
+      bootScript.parentNode.insertBefore(embedScript, userWordSetsScript);
+    } else {
+      const body = clone.querySelector('body');
+      if (body) {
+        body.appendChild(userWordSetsScript);
+        body.appendChild(embedScript);
+      } else {
+        clone.appendChild(userWordSetsScript);
+        clone.appendChild(embedScript);
+      }
+    }
+    let html = '<!DOCTYPE html>\n' + clone.outerHTML;
+    const blob = new Blob([html], { type: 'text/html' });
+    downloadBlob(blob, '单词乱序工具_嵌入数据.html');
+    const userCount = Object.keys(USER_WORD_SETS).length;
+    const msg = userCount > 0 ? '📦 已导出嵌入数据的 HTML 文件（含 ' + userCount + ' 个用户词库）' : '📦 已导出嵌入数据的 HTML 文件（数据为当前词库）';
+    showStatus(msg);
+  }
+
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+  });
+  wordInput.addEventListener('input', () => { importedStructuredItems = null; });
+  shuffleBtn.addEventListener('click', generateShuffle);
+  reshuffleBtn.addEventListener('click', reshuffleCurrent);
+  copyBtn.addEventListener('click', copyResult);
+  printBtn.addEventListener('click', () => window.print());
+  fullscreenBtn.addEventListener('click', toggleFullscreen);
+  clearBtn.addEventListener('click', clearAll);
+  sampleBtn.addEventListener('click', () => {
+    importedStructuredItems = null;
+    wordInput.value = sampleText;
+    generateShuffle();
+  });
+  columnSelect.addEventListener('change', renderBoard);
+  fontSizeInput.addEventListener('input', renderBoard);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.body.classList.contains('fullscreen-mode')) toggleFullscreen();
+  });
+
+  exportJsonBtn.addEventListener('click', exportBackupJSON);
+  importJsonBtn.addEventListener('click', () => { jsonFileInput.click(); });
+  jsonFileInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+      importJSONFile(e.target.files[0]);
+      jsonFileInput.value = '';
+    }
+  });
+  exportHtmlBtn.addEventListener('click', exportEmbeddedHTML);
+  addWordSetBtn.addEventListener('click', () => { wordSetFileInput.click(); });
+  wordSetFileInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files[0]) {
+      addWordSetFromJSON(e.target.files[0]);
+      wordSetFileInput.value = '';
+    }
+  });
+
+  if (EMBEDDED_USER_WORD_SETS && typeof EMBEDDED_USER_WORD_SETS === 'object') {
+    USER_WORD_SETS = EMBEDDED_USER_WORD_SETS;
+    updateUserWordSetsGroup();
+    delete window.__EMBEDDED_USER_WORD_SETS__;
+  }
+
+  if (EMBEDDED_BACKUP) {
+    try {
+      restoreFromBackup(EMBEDDED_BACKUP);
+      delete window.__EMBEDDED_BACKUP__;
+    } catch (e) {
+      console.warn('嵌入数据加载失败', e);
+      if (parsedItems.length === 0 && wordInput.value.trim() === '') {
+        wordInput.value = sampleText;
+        generateShuffle();
+      }
+    }
+  } else {
+    if (wordSetSelect && BUILTIN_WORD_SETS) {
+      const defaultKey = wordSetSelect.value;
+      loadWordSet(defaultKey);
+    } else if (parsedItems.length === 0 && wordInput.value.trim() === '') {
+      wordInput.value = sampleText;
+      generateShuffle();
+    }
+  }
+})();
+</script>
+
+<script id="bootScript">
+(function(){
+  var mainCode = document.getElementById('mainScript').textContent;
+  var script = document.createElement('script');
+  script.textContent = mainCode;
+  document.body.appendChild(script);
+})();
+</script>
+
+<!-- SHA-256 密码验证 -->
+<script>
+async function verifyLogin() {
+    const correctUser = "wzh";
+    // !!! 请将下面这行替换为您生成的 SHA-256 哈希值 !!!
+    const CORRECT_PASSWORD_HASH = 'dba1fba2907f2de68776a1e80bd1c6dcc93715242eac677c3859844bb04f1deb'; // 替换为 64 位十六进制字符串
+
+    const userVal = document.getElementById("username").value;
+    const passVal = document.getElementById("password").value;
+
+    if (userVal !== correctUser) {
+        document.getElementById("error-msg").style.display = "block";
+        return;
+    }
+
+    try {
+        const msgBuffer = new TextEncoder().encode(passVal);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+        if (hashHex === CORRECT_PASSWORD_HASH) {
+            document.getElementById("login-wrapper").style.display = "none";
+            document.getElementById("main-app").style.display = "block";
+        } else {
+            document.getElementById("error-msg").style.display = "block";
+        }
+    } catch (e) {
+        document.getElementById("error-msg").style.display = "block";
+        console.error('密码验证失败', e);
+    }
+}
+</script>
+</body>
+</html>
